@@ -25,3 +25,33 @@ Goals:
       BUILD missing
   )
   ```
+
+## Edit 2021-01-24
+
+It's possible. Link to issue: https://github.com/conan-io/cmake-conan/issues/307
+
+The arch variable needs to be specified in the CMake toolchain file:
+```cmake
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+set(CONAN_ARCHITECTURE armv7)
+...
+```
+
+Everything else can be derived from CMake. The Conan profile file is not necessary any more:
+
+```cmake
+if(CMAKE_CROSSCOMPILING AND NOT CONAN_ARCHITECTURE)
+    message(FATAL_ERROR "The variable CONAN_ARCHITECTURE must be specified for cross-compiling")
+endif()
+
+conan_cmake_run(
+    CONANFILE conanfile.txt
+    BASIC_SETUP
+    ARCH ${CONAN_ARCHITECTURE}
+    ENV CC=${CMAKE_C_COMPILER}
+    ENV CXX=${CMAKE_CXX_COMPILER}
+    PROFILE_AUTO ALL
+    BUILD missing
+)
+```

@@ -12,10 +12,16 @@ endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 
+if(CMAKE_CROSSCOMPILING AND NOT CONAN_ARCHITECTURE)
+    message(FATAL_ERROR "The variable CONAN_ARCHITECTURE must be specified for cross-compiling")
+endif()
+
 conan_cmake_run(
     CONANFILE conanfile.txt
     BASIC_SETUP
-    PROFILE ${CMAKE_SOURCE_DIR}/profile-armv7.conan
+    ARCH ${CONAN_ARCHITECTURE}
+    ENV CC=${CMAKE_C_COMPILER}
+    ENV CXX=${CMAKE_CXX_COMPILER}
     PROFILE_AUTO ALL
     BUILD missing
 )

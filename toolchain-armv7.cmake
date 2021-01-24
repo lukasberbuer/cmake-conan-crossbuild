@@ -5,9 +5,11 @@ set(CONAN_ARCHITECTURE armv7)
 set(CMAKE_C_COMPILER arm-linux-gnueabihf-gcc)
 set(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+set(COMPILE_FLAGS "-mcpu=cortex-a9 -mfpu=neon -ftree-vectorize")
+set(CMAKE_C_FLAGS ${COMPILE_FLAGS})
+set(CMAKE_CXX_FLAGS ${COMPILE_FLAGS})
 
-add_compile_options(-mcpu=cortex-a9 -mfpu=neon -ftree-vectorize)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 # set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 # set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
